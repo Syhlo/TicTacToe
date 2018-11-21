@@ -11,8 +11,26 @@ Indicate selector position:
     - cell_selector(p_input) ? 
     - Visual cue of selector
 
-Input hotkeys: WASD? Arrows? Enter or space to place?
+Input hotkeys:
+    - Movement: WASD, HJKL, Arrow Keys
+    - Select: Enter, Space
+    - Quit: TBD
 
+                Board Example:
+_____________________________________________
+|                                           |
+|                                      ____ |
+|                  | o |               |  | | <- Hotkey to open hotkeys
+|               ___|___|___            ---- |
+|                  | x | @ <- selector      |
+|               ___|___|___                 |
+|                  |   |                    |
+|                  |   |                    |
+|                                           |
+|                                           |
+|-------------------------------------------|
+|                info panel                 |
+---------------------------------------------
 '''
 
 

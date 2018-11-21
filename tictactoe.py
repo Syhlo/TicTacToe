@@ -13,5 +13,6 @@ Flow: playerstate and board -> gamestate -> tictactoe (init file)
 
 '''
 
+# Import libraries
 import gamestate as gs
 import board

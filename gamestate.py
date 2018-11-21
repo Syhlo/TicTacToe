@@ -32,7 +32,11 @@ Set Piece:
 # Import libraries
 import board
 
-# Gamestate dictionary
+
+#--------------#
+#  Game State  #
+#--------------#
+
 gamestate = {'board': {
     'top':    ['0', '0', '0'],
     'middle': ['0', '0', '0'],
@@ -41,7 +45,10 @@ gamestate = {'board': {
     'active': 'False'
 }
 
-# Playerstate dictionary
+#----------------#
+#  Player State  #
+#----------------#
+
 playerstate = {
     'turn': 1,  # 1 or 2
     'player1': 'X',
