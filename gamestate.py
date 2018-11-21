@@ -9,16 +9,14 @@ TicTacToe:
         - Disable piece placement in occupied spaces (if index item is not 0 don't place? send improper move warning?)
 
 Win Check:
-    - Scan dict.list left to right (*[0]-[2])
-    - Scan dict.list top to bottom (top[x] middle[x] bottom[x])
-    - Scan dict.list diagonally (top[0] middle[1] bottom[3] and 3,1,0 as well)
-    - If there's three in a row get the winner and pass it to end game
-
-Note: Maybe concatenate the lists and iterate over that one list for possible win positions?
+    - Concatenate board state lists into one
+    - Iterate over list for possible win combinations
+    - If there's a winner get the winner and pass it to end game
 
 End Game:
-    - Print message stating who won
-    - Ask if they would like to play again (if yes, reset. if no, exit.)
+    - Toggle gamestate[active] to 'False' (cancel while loop)
+    - Display message stating who won
+    - Ask if they would like to play again (Yes -> Reset, No -> Exit program)
 
 Reset:
     - Reset all data structures (reassign to original values)
@@ -26,7 +24,7 @@ Reset:
     - Reset while loop (run tictactoe())
 
 Set Piece:
-    - Change gamestate.board.<key>.<value>[x] to piece
+    - Change gamestate['board']['<key>'][<value>][index] to placed piece
     - Update playerstate.turn.<value>
 
 '''
@@ -36,9 +34,9 @@ import board
 
 # Gamestate dictionary
 gamestate = {'board': {
-    (1, 2, 3): ['0', '0', '0'],
-    (4, 5, 6): ['0', '0', '0'],
-    (7, 8, 9): ['0', '0', '0']
+    'top':    ['0', '0', '0'],
+    'middle': ['0', '0', '0'],
+    'bottom': ['0', '0', '0']
 },
     'active': 'True'
 }
@@ -59,7 +57,20 @@ def set_piece(player):
     pass
 
 
+# Create a list of the board state and return it
+def concatenate():
+    gamestate_list = []
+    for value in gamestate['board'].values():
+        gamestate_list.extend(value)
+    return gamestate_list
+
+
 def win_check(state):
+    iterate = concatenate()
+    # Possible win indexes with concatenated list:
+    # [0][1][2] [3][4][5] [6][7][8]
+    # [0][3][6] [1][4][7] [2][5][8]
+    # [0][4][8] [2][4][6]
     pass
 
 
