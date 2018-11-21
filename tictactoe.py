@@ -8,7 +8,7 @@ Date:          Start: Nov 21 2018
 
 Contributors:  Syhlo & Bippo123
 
-Initialize everything in here; perhaps give rules explanation
+Initialize everything in here
 Flow: playerstate and board -> gamestate -> tictactoe (init file)
 
 '''
