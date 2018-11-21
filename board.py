@@ -19,9 +19,9 @@ Input hotkeys:
                 Board Example:
 _____________________________________________
 |                                           |
-|                                      ____ |
-|                  | o |               |  | | <- Hotkey to open hotkeys
-|               ___|___|___            ---- |
+|                                           |
+|                  | o |                 [H]| <- Hotkey to open hotkeys panel
+|               ___|___|___                 |
 |                  | x | @ <- selector      |
 |               ___|___|___                 |
 |                  |   |                    |
