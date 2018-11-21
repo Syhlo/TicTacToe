@@ -9,7 +9,7 @@ Handle object placement:
 
 Indicate selector position:
     - Input hotkeys: wasd? arrows? enter to place? space to place?
-    - selector(input) ? 
+    - cell_selector(input) ? 
     - Blink the cell
 
 '''
@@ -23,5 +23,5 @@ def place_object(player):
     pass
 
 
-def selector(input):
+def cell_selector(input):
     pass

@@ -1,1 +1,1 @@
-playerstate = 'PlayerOne'
+playerstate = 1
