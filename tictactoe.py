@@ -13,4 +13,4 @@ Flow: playerstate and board -> gamestate -> tictactoe (init file)
 
 '''
 
-import gamestate
+import gamestate as gs

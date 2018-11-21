@@ -33,11 +33,11 @@ Note: Perhaps store the board state as such:
 '''
 
 # Import libraries
-import playerstate
-import board
+import playerstate as ps
+import board as pb
 
 # If game has ended or not
-gamestate = True
+gamestate = None
 
 
 def tictactoe():
