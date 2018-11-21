@@ -1,10 +1,27 @@
 ''' 
 Set parameters
-Initialize Board
-Handle input (wasd? arrows? enter to place? space?)
-Handle object display
-Indicate selector position?
+
+Initialize Board:    
+    - drawboard() ?
+
+Handle object placement:
+    - place_object(player) ?
+
+Indicate selector position:
+    - Input hotkeys: wasd? arrows? enter to place? space to place?
+    - selector(input) ? 
+    - Blink the cell
 
 '''
 
-import gamestate
+
+def drawboard():
+    pass
+
+
+def place_object(player):
+    pass
+
+
+def selector(input):
+    pass

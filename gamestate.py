@@ -5,7 +5,7 @@ Name:       gamestate.py
 TicTacToe:
     - Handle game logic in a while loop
         - Check if won after every placement (run win check)
-        - Place objects (X or O) depending on playerstate (check playerstate)
+        - Place objects (X or O) depending on playerstate (check playerstate, call board placement method)
         - Disable object placement in occupied spaces (if index item is not 0 don't place? send improper move warning?)
 
 Win Check:
@@ -23,8 +23,34 @@ Reset:
     - Reset board
     - Reset while loop (run tictactoe())
 
+Note: Perhaps store the board state as such: 
+    {
+        (0,1,2):['o','x','x'],
+        (3,4,5):['o','o','x'],
+        (6,7,8):['x','x','o']
+    }
+
 '''
 
+# Import libraries
 import playerstate
+import board
 
+# If game has ended or not
 gamestate = True
+
+
+def tictactoe():
+    pass
+
+
+def win_check():
+    pass
+
+
+def end_game():
+    pass
+
+
+def reset():
+    pass
