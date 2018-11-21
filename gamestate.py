@@ -44,11 +44,11 @@ def tictactoe():
     pass
 
 
-def win_check():
+def win_check(game_dict):
     pass
 
 
-def end_game():
+def end_game(winner):
     pass
 
 
