@@ -9,7 +9,7 @@ Date:          Start: Nov 21 2018
 Contributors:  Syhlo & Bippo123
 
 Initialize everything in here; perhaps give rules explanation
-Flow: tictactoe <- gamestate <- playerstate and board
+Flow: playerstate and board -> gamestate -> tictactoe (init file)
 
 '''
 
