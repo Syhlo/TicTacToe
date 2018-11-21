@@ -23,5 +23,5 @@ def place_object(player):
     pass
 
 
-def cell_selector(input):
+def cell_selector(p_input):
     pass
