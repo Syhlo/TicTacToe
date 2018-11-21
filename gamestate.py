@@ -4,15 +4,17 @@ Name:       gamestate.py
 
 TicTacToe:
     - Handle game logic in a while loop
-        - Check if won after every placement (run win check)
-        - Place objects (X or O) depending on playerstate (check playerstate, call board placement method)
-        - Disable object placement in occupied spaces (if index item is not 0 don't place? send improper move warning?)
+        - Check if winner after every placement (run win check)
+        - Place piece (X or O) depending on playerstate (check playerstate, call board placement method)
+        - Disable piece placement in occupied spaces (if index item is not 0 don't place? send improper move warning?)
 
 Win Check:
     - Scan dict.list left to right (*[0]-[2])
     - Scan dict.list top to bottom (top[x] middle[x] bottom[x])
     - Scan dict.list diagonally (top[0] middle[1] bottom[3] and 3,1,0 as well)
     - If there's three in a row get the winner and pass it to end game
+
+Note: Maybe concatenate the lists and iterate over that one list for possible win positions?
 
 End Game:
     - Print message stating who won
@@ -23,28 +25,41 @@ Reset:
     - Reset board
     - Reset while loop (run tictactoe())
 
-Note: Perhaps store the board state as such: 
-    {
-        (0,1,2):['o','x','x'],
-        (3,4,5):['o','o','x'],
-        (6,7,8):['x','x','o']
-    }
+Set Piece:
+    - Change gamestate.board.<key>.<value>[x] to piece
+    - Update playerstate.turn.<value>
 
 '''
 
 # Import libraries
-import playerstate as ps
-import board as pb
+import board
 
-# If game has ended or not
-gamestate = None
+# Gamestate dictionary
+gamestate = {'board': {
+    (1, 2, 3): ['0', '0', '0'],
+    (4, 5, 6): ['0', '0', '0'],
+    (7, 8, 9): ['0', '0', '0']
+},
+    'active': 'True'
+}
+
+# Playerstate dictionary
+playerstate = {
+    'turn': 1,  # 1 or 2
+    'player1': 'X',
+    'player2': 'O'
+}
 
 
 def tictactoe():
     pass
 
 
-def win_check(game_dict):
+def set_piece(player):
+    pass
+
+
+def win_check(state):
     pass
 
 

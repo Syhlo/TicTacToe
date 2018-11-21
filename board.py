@@ -8,9 +8,10 @@ Handle object placement:
     - place_object(player) ?
 
 Indicate selector position:
-    - Input hotkeys: wasd? arrows? enter to place? space to place?
-    - cell_selector(input) ? 
-    - Blink the cell
+    - cell_selector(p_input) ? 
+    - Visual cue of selector
+
+Input hotkeys: WASD? Arrows? Enter or space to place?
 
 '''
 
