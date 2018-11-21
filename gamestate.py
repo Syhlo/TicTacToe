@@ -9,7 +9,7 @@ TicTacToe:
         - Disable piece placement in occupied spaces (if index item is not 0 don't place? send improper move warning?)
 
 Win Check:
-    - Concatenate board state lists into one
+    - Concatenate board state lists into one ✔️
     - Iterate over list for possible win combinations
     - If there's a winner get the winner and pass it to end game
 
@@ -38,7 +38,7 @@ gamestate = {'board': {
     'middle': ['0', '0', '0'],
     'bottom': ['0', '0', '0']
 },
-    'active': 'True'
+    'active': 'False'
 }
 
 # Playerstate dictionary
