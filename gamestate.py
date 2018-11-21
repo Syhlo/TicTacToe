@@ -1,31 +1,8 @@
 '''
 
-Name:       gamestate.py 
+Name:         gamestate.py 
 
-TicTacToe:
-    - Handle game logic in a while loop
-        - Check if winner after every placement (run win check)
-        - Place piece (X or O) depending on playerstate (check playerstate, call board placement method)
-        - Disable piece placement in occupied spaces (if index item is not 0 don't place? send improper move warning?)
-
-Win Check:
-    - Concatenate board state lists into one ✔️
-    - Iterate over list for possible win combinations
-    - If there's a winner get the winner and pass it to end game
-
-End Game:
-    - Toggle gamestate[active] to 'False' (cancel while loop)
-    - Display message stating who won
-    - Ask if they would like to play again (Yes -> Reset, No -> Exit program)
-
-Reset:
-    - Reset all data structures (reassign to original values)
-    - Reset board
-    - Reset while loop (run tictactoe())
-
-Set Piece:
-    - Change gamestate['board']['<key>'][<value>][index] to placed piece
-    - Update playerstate.turn.<value>
+Description:  Handles game logic, game state, and player state
 
 '''
 
@@ -56,11 +33,25 @@ playerstate = {
 }
 
 
+# Main loop
 def tictactoe():
+    '''
+    Logic:
+        - Handle game logic in a while loop
+            - Check if winner after every placement (run win check)
+            - Place piece (X or O) depending on playerstate (check playerstate, call board placement method)
+            - Disable piece placement in occupied spaces (if index item is not 0 don't place? send improper move warning?)
+    '''
     pass
 
 
+# Sets the piece in the game state dictionary
 def set_piece(player):
+    '''
+    Logic:
+        - Change gamestate['board']['<key>'][<value>][index] to placed piece
+        - Update playerstate.turn.<value>
+    '''
     pass
 
 
@@ -72,18 +63,41 @@ def concatenate():
     return gamestate_list
 
 
+# Check for winner
 def win_check(state):
     iterate = concatenate()
-    # Possible win indexes with concatenated list:
+    # Possible win combinations (concatenated list indexes)
     # [0][1][2] [3][4][5] [6][7][8]
     # [0][3][6] [1][4][7] [2][5][8]
     # [0][4][8] [2][4][6]
+
+    '''
+    Logic:
+        - Iterate list cross referencing win combinations (dictionary ?)
+        - Create sets for win combinations with no 0s
+        - Check length of said sets
+        - Set length equal to 1? Determine who won and call end_game(<winner>)
+    '''
     pass
 
 
+# End game and offer reset
 def end_game(winner):
+    '''
+    Logic:
+        - Toggle gamestate['active'] to 'False' (cancels tictactoe() while loop)
+        - Display message stating who won
+        - Ask if they would like to play again (Yes -> Reset, No -> Exit program)
+    '''
     pass
 
 
+# Reset game state, player state, and the board
 def reset():
+    '''
+    Logic:
+        - Reset all data structures(reassign to original values)
+        - Reset board
+        - Reset while loop(run tictactoe())
+    '''
     pass
