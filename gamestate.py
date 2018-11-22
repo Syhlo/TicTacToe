@@ -6,10 +6,6 @@ Description:  Handles game logic, game state, and player state
 
 '''
 
-# Import libraries
-import board
-
-
 #--------------#
 #  Game State  #
 #--------------#
