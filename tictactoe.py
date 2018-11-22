@@ -33,7 +33,7 @@ Tie in game logic:
     - reset() ❌
 Hotkeys:
     - Movement: WASD, HJKL, Arrow Keys ✔️
-    - Select: Enter, Space ❌
+    - Select: Enter, Space ✔️
     - Quit: Shift + Q ✔️
     - Menu: M  (Opens Hotkey Menu) ❌
 
