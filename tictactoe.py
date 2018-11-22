@@ -16,14 +16,16 @@ Flow: playerstate and board -> gamestate -> tictactoe (init file)
 # Import libraries
 
 import curses as cs
-import time
 import gamestate
+from itertools import cycle
 from curses import wrapper
 
 ''' 
 
 TO DO:
-Handle object placement ❌
+Handle piece placement 
+    - Ability to place piece ✔️
+    - Cycle between X and O ❌
 Tie in game logic:
     - set_piece() ❌
     - tictactoe() ❌
@@ -41,31 +43,33 @@ Hotkeys:
 
 def main(stdscr):
 
-    # Color sets
+    # Color set
     cs.init_pair(1, cs.COLOR_WHITE, cs.COLOR_BLACK)  # bg,fg
-    cs.init_pair(2, cs.COLOR_YELLOW, cs.COLOR_BLACK)
 
     #-------------------#
-    #    Body Window    #
+    #    Board Window   #
     #-------------------#
     b = cs.newwin(14, 46, 0, 5)
-    b.bkgd(' ', cs.color_pair(1))
-    b.box()
     b.keypad(True)
 
     # Initial Parameters
-    cs.noecho()
+    cs.noecho()  # no keyboard echo
+    cs.cbreak()  # don't wait for newline
 
-    # not in use:
+    # not in use (yet):
     # cols, rows = b.getmaxyx()
     # 14      46
 
     def drawboard():
+        # Settings
+        b.bkgd(' ', cs.color_pair(1))
+        b.box()
+
         #-------------------#
         #  TicTacToe Board  #
         #-------------------#
         # Board Horizontal Lines
-        b.hline(5, 18, cs.ACS_HLINE | cs.A_PROTECT, 11)
+        b.hline(5, 18, cs.ACS_HLINE, 11)
         b.hline(7, 18, cs.ACS_HLINE, 11)
 
         # Board Vertical Lines
@@ -83,11 +87,14 @@ def main(stdscr):
     #   Status Window   #
     #-------------------#
     s = cs.newwin(1, 40, 14, 8)
-    s.bkgd(' ', cs.color_pair(1))
-    s.box()
 
-    # Status Bar Text
+    # Status Bar Contents
     def status_bar():
+        # Settings
+        s.bkgd(' ', cs.color_pair(1))
+        s.box()
+
+        # Status Text
         s.addstr(0, 1,  '[ turn: p1 ]')
         s.addstr(0, 27, '[  status  ]')
     status_bar()
@@ -108,9 +115,13 @@ def main(stdscr):
         c = None
         b.move(6, 23)
         while True:
+            # Settings
             b.move(y, x)
             b.refresh()
             c = b.getch()
+
+            # Cycle pieces (Not Working)
+            piece = cycle('XO')
 
             # Key input [WASD keys]
             if c in (ord('w'), ord('k'), cs.KEY_UP) and y > 4:
@@ -124,7 +135,12 @@ def main(stdscr):
 
             # Place pieces with E or SpaceBar
             elif c in (ord('e'), ord(' ')):
-                pass
+                b.addch(y, x, next(piece))
+
+            # If Shift + R reset board
+            elif c == ord('R'):
+                b.clear()
+                drawboard()
 
             # If Shift + Q exit the program
             elif c == ord('Q'):
