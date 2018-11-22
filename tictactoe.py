@@ -76,7 +76,7 @@ def main(stdscr):
         b.vline(4, 21, cs.ACS_VLINE, 5)
         b.vline(4, 25, cs.ACS_VLINE, 5)
 
-        # Body Combining Lines
+        # Board Combining Lines
         b.vline(5, 21, cs.ACS_SSSS, 1)
         b.vline(5, 25, cs.ACS_SSSS, 1)
         b.vline(7, 21, cs.ACS_SSSS, 1)
