@@ -49,7 +49,7 @@ def main(stdscr):
     #-------------------#
     #    Board Window   #
     #-------------------#
-    b = cs.newwin(14, 46, 0, 5)
+    b = cs.newwin(14, 46, 1, 5)
     b.keypad(True)
 
     # Initial Parameters
@@ -86,14 +86,12 @@ def main(stdscr):
     #-------------------#
     #   Status Window   #
     #-------------------#
-    s = cs.newwin(1, 40, 14, 8)
+    s = cs.newwin(1, 40, 15, 8)
+    s.bkgd(' ', cs.color_pair(1))
+    s.box()
 
     # Status Bar Contents
     def status_bar():
-        # Settings
-        s.bkgd(' ', cs.color_pair(1))
-        s.box()
-
         # Status Text
         s.addstr(0, 1,  '[ turn: p1 ]')
         s.addstr(0, 27, '[  status  ]')
