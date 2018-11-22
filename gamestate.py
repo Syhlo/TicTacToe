@@ -49,7 +49,7 @@ def tictactoe():
 def set_piece(player):
     '''
     Logic:
-        - Change gamestate['board']['<key>'][<value>][index] to placed piece
+        - Change gamestate['board']['<key>']['<value>'][index] to placed piece
         - Update playerstate.turn.<value>
     '''
     pass
@@ -66,17 +66,16 @@ def concatenate():
 # Check for winner
 def win_check(state):
     iterate = concatenate()
-    # Possible win combinations (concatenated list indexes)
+    # Possible win combinations (concatenated list indices)
     # [0][1][2] [3][4][5] [6][7][8]
     # [0][3][6] [1][4][7] [2][5][8]
     # [0][4][8] [2][4][6]
 
     '''
     Logic:
-        - Iterate list cross referencing win combinations (dictionary ?)
-        - Create sets for win combinations with no 0s
-        - Check length of said sets
-        - Set length equal to 1? Determine who won and call end_game(<winner>)
+        - Iterate local list cross referencing win combinations (dictionary ?)
+        - For win combinations not containing '0': len(set(<combination>))
+        - Result is equal to 1 (all 3 are the same)? Determine who won and call end_game(<winner>)
     '''
     pass
 
@@ -96,7 +95,7 @@ def end_game(winner):
 def reset():
     '''
     Logic:
-        - Reset all data structures(reassign to original values)
+        - Reset all data structures (reassign to original values)
         - Reset board
         - Reset while loop(run tictactoe())
     '''
