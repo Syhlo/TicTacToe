@@ -11,11 +11,11 @@ Description:  Handles game logic, game state, and player state
 #--------------#
 
 gamestate = {'board': {
-    'top':    ['0', '0', '0'],
-    'middle': ['0', '0', '0'],
-    'bottom': ['0', '0', '0']
+    'top':    ['1', '2', '3'],
+    'middle': ['4', '5', '6'],
+    'bottom': ['7', '8', '9']
 },
-    'active': 'False'
+    'board_active': 'False'
 }
 
 #----------------#
@@ -42,13 +42,32 @@ def tictactoe():
 
 
 # Sets the piece in the game state dictionary
-def set_piece(player):
-    '''
-    Logic:
-        - Change gamestate['board']['<key>']['<value>'][index] to placed piece
-        - Update playerstate.turn.<value>
-    '''
-    pass
+def set_piece(y, x, player):
+
+    # Tool to find the key and index
+    gamestate_key = {
+        '4': 'top',
+        '6': 'middle',
+        '8': 'bottom',
+        '19': 0,
+        '23': 1,
+        '27': 2
+    }
+
+    # Return key associated with y
+    key = gamestate_key[str(y)]
+    # Return index associated with x
+    index = gamestate_key[str(x)]
+
+    # Set the proper list[index] to the player's piece
+    gamestate['board'][key][index] = playerstate[str(player)]
+
+    # testing purposes
+    print(gamestate['board'])
+
+
+# Check if working
+set_piece(4, 27, 'player1')
 
 
 # Create a list of the board state and return it
