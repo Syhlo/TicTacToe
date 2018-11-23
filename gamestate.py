@@ -43,7 +43,6 @@ def tictactoe():
 
 # Sets the piece in the game state dictionary
 def set_piece(y, x, player):
-
     # Tool to find the key and index
     gamestate_key = {
         '4': 'top',
