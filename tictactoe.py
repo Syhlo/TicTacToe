@@ -38,6 +38,9 @@ def main(stdscr):
         # Settings
         b.bkgd(' ', cs.color_pair(1))
         b.box()
+
+        # Board Text
+        b.addstr(0, 17, '[ TicTacToe ]')
         b.addstr(1, 35, '[Keys: M]')
 
         #-------------------#
@@ -80,17 +83,18 @@ def main(stdscr):
     #   Hotkey Window   #
     #-------------------#
     def hotkey_menu():
-        hk = cs.newwin(13, 31, 1, 52)
+        hk = cs.newwin(14, 31, 1, 52)
         hk.bkgd(' ', cs.color_pair(1))
         hk.box()
-        hk.addstr(1, 2, 'Movement Keys:')
-        hk.addstr(2, 3, '[WASD] [HJKL] [Arrow Keys]')
-        hk.addstr(4, 2, 'Quit:')
-        hk.addstr(5, 3, '[Shift + Q]')
-        hk.addstr(7, 2, 'Place Piece:')
-        hk.addstr(8, 3, '[Enter] [Space]')
-        hk.addstr(10, 2, 'Restart:')
-        hk.addstr(11, 3, '[Shift + R]')
+        hk.addstr(0, 8, '[ Hotkey Menu ]')
+        hk.addstr(2, 2, 'Movement Keys:')
+        hk.addstr(3, 3, '[WASD] [HJKL] [Arrow Keys]')
+        hk.addstr(5, 2, 'Quit:')
+        hk.addstr(6, 3, '[Shift + Q]')
+        hk.addstr(8, 2, 'Place Piece:')
+        hk.addstr(9, 3, '[Enter] [Space]')
+        hk.addstr(11, 2, 'Restart:')
+        hk.addstr(12, 3, '[Shift + R]')
         hk.refresh()
 
     #-------------------#
@@ -103,6 +107,7 @@ def main(stdscr):
     def hotkeys():
         # cursor y,x coords
         y, x = 6, 23
+        build = True
         while True:
             # Settings
             b.move(y, x)
@@ -124,7 +129,14 @@ def main(stdscr):
 
             # Hotkey Menu [Key: M]
             elif c == ord('m'):
-                hotkey_menu()
+                hk = cs.newwin(14, 31, 1, 52)
+                if build:
+                    hotkey_menu()
+                    build = False
+                else:
+                    hk.clear()
+                    hk.refresh()
+                    build = True
 
             # Place pieces [Keys: E or Spacebar]
             elif c in (ord('e'), ord(' ')):
