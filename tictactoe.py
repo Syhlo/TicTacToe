@@ -13,32 +13,6 @@ import curses as cs
 import gamestate
 from itertools import cycle
 from curses import wrapper
-'''
-
-TO DO:
-Internet co-op ? ❌
-
-Splash Page: ?
-    - Start ❌
-    - Options [Online/Offline, Port, Color Theme] ❌
-    - About ❌
-
-Status information:
-    - Winner (p1 won/p2 won) ❌
-    - Reload ❌
-    - Playing ❌
-
-Handle piece placement
-    - Cycle between X and O ❌
-
-Tie in game logic:
-    - set_piece() ❌
-    - tictactoe() ❌
-    - win_check -> end_game() ❌
-    - reset() ❌
-
-
-'''
 
 
 def main(stdscr):
@@ -175,3 +149,30 @@ def main(stdscr):
 
 
 wrapper(main)
+
+'''
+
+TO DO:
+Internet co-op ? ❌
+
+Splash Page: ?
+    - Start ❌
+    - Options [Online/Offline, Port, Color Theme] ❌
+    - About ❌
+
+Status information:
+    - Winner (p1 won/p2 won) ❌
+    - Reload ❌
+    - Playing ❌
+
+Handle piece placement
+    - Cycle between X and O ❌
+
+Tie in game logic:
+    - set_piece() ❌
+    - tictactoe() ❌
+    - win_check -> end_game() ❌
+    - reset() ❌
+
+
+'''
