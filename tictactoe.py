@@ -16,7 +16,7 @@ import gamestate
 from itertools import cycle
 from curses import wrapper
 
-''' 
+'''
 
 TO DO:
 Internet co-op ? ❌
@@ -32,7 +32,7 @@ Status information:
     - Reload ❌
     - Playing ❌
 
-Handle piece placement 
+Handle piece placement
     - Cycle between X and O ❌
 
 Tie in game logic:
@@ -40,12 +40,6 @@ Tie in game logic:
     - tictactoe() ❌
     - win_check -> end_game() ❌
     - reset() ❌
-
-Hotkeys:
-    - Movement: WASD, HJKL, Arrow Keys ✔️
-    - Select: Enter, Space ✔️
-    - Quit: Shift + Q ✔️
-    - Menu: M  (Opens Hotkey Menu) ❌
 
 
 '''
@@ -74,6 +68,7 @@ def main(stdscr):
         # Settings
         b.bkgd(' ', cs.color_pair(1))
         b.box()
+        b.addstr(1, 35, '[Keys: M]')
 
         #-------------------#
         #  TicTacToe Board  #
@@ -112,13 +107,30 @@ def main(stdscr):
     s.refresh()
 
     #-------------------#
+    #   Hotkey Window   #
+    #-------------------#
+    def hotkey_menu():
+        hk = cs.newwin(13, 31, 1, 52)
+        hk.bkgd(' ', cs.color_pair(1))
+        hk.box()
+        hk.addstr(1, 2, 'Movement Keys:')
+        hk.addstr(2, 3, '[WASD] [HJKL] [Arrow Keys]')
+        hk.addstr(4, 2, 'Quit:')
+        hk.addstr(5, 3, '[Shift + Q]')
+        hk.addstr(7, 2, 'Place Piece:')
+        hk.addstr(8, 3, '[Enter] [Space]')
+        hk.addstr(10, 2, 'Restart:')
+        hk.addstr(11, 3, '[Shift + R]')
+        hk.refresh()
+
+    #-------------------#
     #  Cursor Control   #
     #-------------------#
     # Set cursor
     cs.curs_set(1)
 
     # Cursor Input
-    def curs():
+    def hotkeys():
         y, x = 6, 23
         c = None
         b.move(6, 23)
@@ -131,6 +143,10 @@ def main(stdscr):
             # Cycle pieces (Not Working)
             piece = cycle('XO')
 
+            #-------------------#
+            #      Hotkeys      #
+            #-------------------#
+
             # Key input [WASD keys]
             if c in (ord('w'), ord('k'), cs.KEY_UP) and y > 4:
                 y -= 2
@@ -140,6 +156,11 @@ def main(stdscr):
                 x -= 4
             elif c in (ord('d'), ord('l'), cs.KEY_RIGHT) and x < 27:
                 x += 4
+
+            # Hotkey Menu
+            elif c == ord('m'):
+                hotkey_menu()
+                b.move(y, x)
 
             # Place pieces with E or SpaceBar
             elif c in (ord('e'), ord(' ')):
@@ -154,7 +175,7 @@ def main(stdscr):
             elif c == ord('Q'):
                 break
 
-    curs()
+    hotkeys()
 
 
 wrapper(main)
