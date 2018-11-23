@@ -53,9 +53,9 @@ def set_piece(y, x, player):
         '27': 2
     }
 
-    # Return key associated with y
+    # Return key associated with y coordinate
     key = gamestate_key[str(y)]
-    # Return index associated with x
+    # Return index associated with x coordinate
     index = gamestate_key[str(x)]
 
     # Set the proper list[index] to the player's piece
