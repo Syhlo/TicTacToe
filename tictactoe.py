@@ -1,4 +1,5 @@
 '''
+
 Name:          TicTacToe
 
 Description:   TicTacToe using Curses for input and graphics
@@ -8,14 +9,10 @@ Date:          Start: Nov 21 2018
 Contributors:  Syhlo & Bippo123
 
 '''
-
-# Import libraries
-
 import curses as cs
 import gamestate
 from itertools import cycle
 from curses import wrapper
-
 '''
 
 TO DO:
@@ -23,8 +20,7 @@ Internet co-op ? ❌
 
 Splash Page: ?
     - Start ❌
-    - Options [Port, Online/Offline, Color Theme] ❌
-    - Rules ❌
+    - Options [Online/Offline, Port, Color Theme] ❌
     - About ❌
 
 Status information:
