@@ -108,6 +108,7 @@ def main(stdscr):
         # cursor y,x coords
         y, x = 6, 23
         build = True
+        piece = cycle('XO')
         while True:
             # Settings
             b.move(y, x)
@@ -140,8 +141,6 @@ def main(stdscr):
 
             # Place pieces [Keys: E or Spacebar]
             elif c in (ord('e'), ord(' ')):
-                # Cycle pieces (Not Working)
-                piece = cycle('XO')
                 b.addch(y, x, next(piece))
 
             # Reset Board [Key: Shift + R]
@@ -172,9 +171,6 @@ Status information:
     - Winner (p1 won/p2 won) ❌
     - Reload ❌
     - Playing ❌
-
-Handle piece placement
-    - Cycle between X and O ❌
 
 Tie in game logic:
     - set_piece() ❌
