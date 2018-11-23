@@ -19,14 +19,28 @@ from curses import wrapper
 ''' 
 
 TO DO:
+Internet co-op ? ❌
+
+Splash Page: ?
+    - Start ❌
+    - Options [Port, Online/Offline, Color Theme] ❌
+    - Rules ❌
+    - About ❌
+
+Status information:
+    - Winner (p1 won/p2 won) ❌
+    - Reload ❌
+    - Playing ❌
+
 Handle piece placement 
-    - Ability to place piece ✔️
     - Cycle between X and O ❌
+
 Tie in game logic:
     - set_piece() ❌
     - tictactoe() ❌
     - win_check -> end_game() ❌
     - reset() ❌
+
 Hotkeys:
     - Movement: WASD, HJKL, Arrow Keys ✔️
     - Select: Enter, Space ✔️
