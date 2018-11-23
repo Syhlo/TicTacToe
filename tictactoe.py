@@ -94,30 +94,25 @@ def main(stdscr):
         hk.refresh()
 
     #-------------------#
-    #  Cursor Control   #
+    #   Input Control   #
     #-------------------#
     # Set cursor
     cs.curs_set(1)
 
-    # Cursor Input
+    # Hotkey Inputs
     def hotkeys():
+        # cursor y,x coords
         y, x = 6, 23
-        c = None
-        b.move(6, 23)
         while True:
             # Settings
             b.move(y, x)
-            b.refresh()
             c = b.getch()
-
-            # Cycle pieces (Not Working)
-            piece = cycle('XO')
 
             #-------------------#
             #      Hotkeys      #
             #-------------------#
 
-            # Key input [WASD keys]
+            # Key input [Keys: WASD, HJKL (VIM), and Arrow Keys]
             if c in (ord('w'), ord('k'), cs.KEY_UP) and y > 4:
                 y -= 2
             elif c in (ord('s'), ord('j'), cs.KEY_DOWN) and y < 8:
@@ -127,21 +122,22 @@ def main(stdscr):
             elif c in (ord('d'), ord('l'), cs.KEY_RIGHT) and x < 27:
                 x += 4
 
-            # Hotkey Menu
+            # Hotkey Menu [Key: M]
             elif c == ord('m'):
-                hotkey_menu()
-                b.move(y, x)
+                hotkey_menu
 
-            # Place pieces with E or SpaceBar
+            # Place pieces [Keys: E or Spacebar]
             elif c in (ord('e'), ord(' ')):
+                # Cycle pieces (Not Working)
+                piece = cycle('XO')
                 b.addch(y, x, next(piece))
 
-            # If Shift + R reset board
+            # Reset Board [Key: Shift + R]
             elif c == ord('R'):
                 b.clear()
                 drawboard()
 
-            # If Shift + Q exit the program
+            # Exit [Key: Shift + Q]
             elif c == ord('Q'):
                 break
 
