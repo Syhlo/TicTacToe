@@ -124,7 +124,7 @@ def main(stdscr):
 
             # Hotkey Menu [Key: M]
             elif c == ord('m'):
-                hotkey_menu
+                hotkey_menu()
 
             # Place pieces [Keys: E or Spacebar]
             elif c in (ord('e'), ord(' ')):
