@@ -141,8 +141,8 @@ def main(stdscr):
 
             # If there's a draw
             if winner is None:
-                # Place the last piece
-                place_piece()
+                # Place the last piece and check for win
+                place_piece()  # Not Working, have to grab y,x for cursor somehow (b.maxyx() not working)
                 gs.win_check()
 
                 # Build window
