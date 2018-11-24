@@ -60,6 +60,7 @@ def main(stdscr):
         b.vline(5, 25, cs.ACS_SSSS, 1)
         b.vline(7, 21, cs.ACS_SSSS, 1)
         b.vline(7, 25, cs.ACS_SSSS, 1)
+        b.refresh()
     drawboard()
 
     #-------------------#
@@ -73,11 +74,10 @@ def main(stdscr):
         # Status Text
         s.addstr(0, 1,  '[ Turn: X  ]')
         s.addstr(0, 27, '[ HKeys: M ]')
+        s.refresh()
     status_bar()
 
     # Refresh
-    b.refresh()
-    s.refresh()
 
     #-------------------#
     #   Hotkey Window   #
@@ -230,11 +230,12 @@ def main(stdscr):
                     place_piece()
                     get_winner()
 
-            # Reset Board [Key: Shift + R]
+            # Restart Game [Key: Shift + R]
             if c == ord('R'):
                 gs.restart()
                 b.clear()
                 drawboard()
+                status_bar()
 
             # Exit [Key: Shift + Q]
             if c == ord('Q'):
@@ -251,7 +252,7 @@ print(gs.gamestate['board_active'])
 '''
 
 TO DO:
-Internet co-op ? ❌
+co-op ? ❌
 
 Splash Page: ?
     - Start ❌
@@ -261,4 +262,5 @@ Splash Page: ?
 
 BUGS:
 Not placing last item during tie. Look at place_piece() and get_winner() to figure it out.
+
 '''
