@@ -6,7 +6,7 @@ Description:   TicTacToe using Curses for input and graphics
 
 Date:          Start: Nov 21 2018
 
-Contributors:  Syhlo & Bippo123
+Author:  Syhlo
 
 '''
 import curses as cs
@@ -225,6 +225,7 @@ Splash Page: ?
     - Start ❌
     - Options [Online/Offline, Port, Color Theme] ❌
     - About ❌
+    - Exit ❌
 
 Status information:
     - won (p1 won/p2 won) ✔️
@@ -232,9 +233,8 @@ Status information:
     - Playing ❌
 
 Tie in game logic:
-    - set_piece() ❌
-    - tictactoe() ❌
-    - win_check -> end_game() ❌
+    - set_piece() ✔️
+    - win_check ✔️ -> end_game() ❌
     - reset() ❌
 
 
