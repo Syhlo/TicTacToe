@@ -21,7 +21,7 @@ print(gs.gamestate['board'])
 def main(stdscr):
 
     # Color set
-    cs.init_pair(1, cs.COLOR_RED, cs.COLOR_BLACK)  # bg,fg
+    cs.init_pair(1, cs.COLOR_BLUE, cs.COLOR_BLACK)  # bg,fg
 
     #-------------------#
     #    Board Window   #
@@ -135,34 +135,63 @@ def main(stdscr):
                 # Run pieces() again to prevent repeated pieces
                 tracker()
                 pieces()
-                pass
 
         def get_winner():
             winner = gs.win_check()
 
+            # If there's a draw
             if winner is None:
+                place_piece()
+                # Build window
                 nowin = cs.newwin(3, 40, 11, 8)
                 nowin.bkgd(' ', cs.color_pair(1))
                 nowin.box()
-                nowin.addstr(
-                    1, 2, '* Ended in a draw. Restart? Y/N    *')
+                nowin.addstr(1, 2, '* Ended in a draw. Restart? Y/N    *')
                 nowin.refresh()
+                nx = 30
+
+                # Draw input Loop
+                while True:
+                    # Position mouse and get user input
+                    nowin.move(1, nx)
+                    ch = nowin.getch()
+
+                    # Exit [Key: Shift + Q]
+                    if ch == ord('Q'):
+                        break
+
+                    # Place pieces [Keys: E or Spacebar]
+                    if ch in (ord('e'), ord(' ')):
+                        if nx == 32:
+                            pass
+                        if nx == 30:
+                            gs.restart()
+                            b.clear()
+                            drawboard()
+                            break
+
+                    # Movement [Keys: AD, HL, and Arrow Keys]
+                    if ch in (ord('a'), ord('h'), cs.KEY_LEFT) and nx > 30:
+                        nx -= 2
+                    if ch in (ord('d'), ord('l'), cs.KEY_RIGHT) and nx < 31:
+                        nx += 2
+
+            # No winner
             elif winner is False:
                 pass
+
+            # Found winner
             elif winner is not False:
                 s.addstr(0, 27, '[  {} WINS  ]'.format(winner))
                 s.refresh()
                 gs.end_game()
-            else:
-                pass
 
-            '''
-            TO DO:
-                Restart pop-up for winner -> end_game() -> restart() if yes exit() if no
+        #-------------------#
+        #  Main Input Loop  #
+        #-------------------#
 
-            '''
-
-        while gs.gamestate['board_active']:
+        # Main input loop
+        while True:
             # Settings
             b.move(y, x)
             c = b.getch()
@@ -171,18 +200,18 @@ def main(stdscr):
             #      Hotkeys      #
             #-------------------#
 
-            # Key input [Keys: WASD, HJKL (VIM), and Arrow Keys]
+            # Movement [Keys: WASD, HJKL, and Arrow Keys]
             if c in (ord('w'), ord('k'), cs.KEY_UP) and y > 4:
                 y -= 2
-            elif c in (ord('s'), ord('j'), cs.KEY_DOWN) and y < 8:
+            if c in (ord('s'), ord('j'), cs.KEY_DOWN) and y < 8:
                 y += 2
-            elif c in (ord('a'), ord('h'), cs.KEY_LEFT) and x > 19:
+            if c in (ord('a'), ord('h'), cs.KEY_LEFT) and x > 19:
                 x -= 4
-            elif c in (ord('d'), ord('l'), cs.KEY_RIGHT) and x < 27:
+            if c in (ord('d'), ord('l'), cs.KEY_RIGHT) and x < 27:
                 x += 4
 
             # Hotkey Menu [Key: M]
-            elif c == ord('m'):
+            if c == ord('m'):
                 hk = cs.newwin(14, 31, 1, 52)
                 if hk_showing:
                     hotkey_menu()
@@ -193,20 +222,20 @@ def main(stdscr):
                     hk_showing = True
 
             # Place pieces [Keys: E or Spacebar]
-            elif c in (ord('e'), ord(' ')):
-                place_piece()
-                get_winner()
+            if c in (ord('e'), ord(' ')):
+                if gs.gamestate['board_active'] is True:
+                    place_piece()
+                    get_winner()
 
-                # Reset Board [Key: Shift + R]
-            elif c == ord('R'):
+            # Reset Board [Key: Shift + R]
+            if c == ord('R'):
+                gs.restart()
                 b.clear()
                 drawboard()
 
             # Exit [Key: Shift + Q]
-            elif c == ord('Q'):
-                b.clear()
+            if c == ord('Q'):
                 break
-
     hotkeys()
 
 
@@ -230,12 +259,10 @@ Splash Page: ?
 Status information:
     - won (p1 won/p2 won) ✔️
     - Reload ❌
-    - Playing ❌
 
 Tie in game logic:
     - set_piece() ✔️
-    - win_check ✔️ -> end_game() ❌
+    - win_check ✔️ -> end_game() ✔️
     - reset() ❌
-
 
 '''
