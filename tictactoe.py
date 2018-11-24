@@ -10,15 +10,18 @@ Contributors:  Syhlo & Bippo123
 
 '''
 import curses as cs
-import gamestate
+import gamestate as gs
 from itertools import cycle
 from curses import wrapper
+
+# testing purposes
+print(gs.gamestate['board'])
 
 
 def main(stdscr):
 
     # Color set
-    cs.init_pair(1, cs.COLOR_WHITE, cs.COLOR_BLACK)  # bg,fg
+    cs.init_pair(1, cs.COLOR_RED, cs.COLOR_BLACK)  # bg,fg
 
     #-------------------#
     #    Board Window   #
@@ -36,12 +39,10 @@ def main(stdscr):
 
     def drawboard():
         # Settings
-        b.bkgd(' ', cs.color_pair(1))
         b.box()
 
         # Board Text
         b.addstr(0, 17, '[ TicTacToe ]')
-        b.addstr(1, 35, '[Keys: M]')
 
         #-------------------#
         #  TicTacToe Board  #
@@ -65,14 +66,13 @@ def main(stdscr):
     #   Status Window   #
     #-------------------#
     s = cs.newwin(1, 40, 15, 8)
-    s.bkgd(' ', cs.color_pair(1))
     s.box()
 
     # Status Bar Contents
     def status_bar():
         # Status Text
-        s.addstr(0, 1,  '[ turn: p1 ]')
-        s.addstr(0, 27, '[  status  ]')
+        s.addstr(0, 1,  '[ Turn: X  ]')
+        s.addstr(0, 27, '[ HKeys: M ]')
     status_bar()
 
     # Refresh
@@ -84,17 +84,16 @@ def main(stdscr):
     #-------------------#
     def hotkey_menu():
         hk = cs.newwin(14, 31, 1, 52)
-        hk.bkgd(' ', cs.color_pair(1))
         hk.box()
         hk.addstr(0, 8, '[ Hotkey Menu ]')
-        hk.addstr(2, 2, 'Movement Keys:')
-        hk.addstr(3, 3, '[WASD] [HJKL] [Arrow Keys]')
-        hk.addstr(5, 2, 'Quit:')
-        hk.addstr(6, 3, '[Shift + Q]')
-        hk.addstr(8, 2, 'Place Piece:')
-        hk.addstr(9, 3, '[Enter] [Space]')
-        hk.addstr(11, 2, 'Restart:')
-        hk.addstr(12, 3, '[Shift + R]')
+        hk.addstr(1, 2, 'Movement Keys:')
+        hk.addstr(2, 3, '[WASD] [HJKL] [Arrow Keys]')
+        hk.addstr(4, 2, 'Quit:')
+        hk.addstr(5, 3, '[Shift + Q]')
+        hk.addstr(7, 2, 'Place Piece:')
+        hk.addstr(8, 3, '[Enter] [Space]')
+        hk.addstr(10, 2, 'Restart:')
+        hk.addstr(11, 3, '[Shift + R]')
         hk.refresh()
 
     #-------------------#
@@ -103,13 +102,67 @@ def main(stdscr):
     # Set cursor
     cs.curs_set(1)
 
-    # Hotkey Inputs
+    # Hotkey Control
     def hotkeys():
         # cursor y,x coords
         y, x = 6, 23
-        build = True
-        piece = cycle('XO')
-        while True:
+
+        # Whether the hotkeys menu is showing
+        hk_showing = True
+        pieces = cycle('XO').__next__
+        tracker = cycle('OX').__next__
+
+        #--------------------#
+        #  Hotkey Functions  #
+        #--------------------#
+
+        # Piece placing logic
+        def place_piece():
+            # Get which piece to place
+            piece = pieces()
+            track = tracker()
+
+            # Run set_piece() to try to place it on the board
+            can_place = gs.set_piece(y, x, piece)
+
+            # If place_piece is true (it can be placed
+            if can_place:
+                s.addstr(0, 1,  '[ Turn: {}  ]'.format(track))
+                b.addch(y, x, piece)
+                s.refresh()
+
+            else:
+                # Run pieces() again to prevent repeated pieces
+                tracker()
+                pieces()
+                pass
+
+        def get_winner():
+            winner = gs.win_check()
+
+            if winner is None:
+                nowin = cs.newwin(3, 40, 11, 8)
+                nowin.bkgd(' ', cs.color_pair(1))
+                nowin.box()
+                nowin.addstr(
+                    1, 2, '* Ended in a draw. Restart? Y/N    *')
+                nowin.refresh()
+            elif winner is False:
+                pass
+            elif winner is not False:
+                s.addstr(0, 27, '[  {} WINS  ]'.format(winner))
+                s.refresh()
+                gs.end_game()
+            else:
+                pass
+
+            '''
+            TO DO:
+                Restart pop-up for winner -> end_game() -> restart() if yes exit() if no
+
+            '''
+
+        while gs.gamestate['board_active']:
             # Settings
             b.move(y, x)
             c = b.getch()
@@ -131,31 +184,37 @@ def main(stdscr):
             # Hotkey Menu [Key: M]
             elif c == ord('m'):
                 hk = cs.newwin(14, 31, 1, 52)
-                if build:
+                if hk_showing:
                     hotkey_menu()
-                    build = False
+                    hk_showing = False
                 else:
                     hk.clear()
                     hk.refresh()
-                    build = True
+                    hk_showing = True
 
             # Place pieces [Keys: E or Spacebar]
             elif c in (ord('e'), ord(' ')):
-                b.addch(y, x, next(piece))
+                place_piece()
+                get_winner()
 
-            # Reset Board [Key: Shift + R]
+                # Reset Board [Key: Shift + R]
             elif c == ord('R'):
                 b.clear()
                 drawboard()
 
             # Exit [Key: Shift + Q]
             elif c == ord('Q'):
+                b.clear()
                 break
 
     hotkeys()
 
 
 wrapper(main)
+
+# testing purposes
+print(gs.gamestate['board'])
+print(gs.gamestate['board_active'])
 
 '''
 
@@ -168,7 +227,7 @@ Splash Page: ?
     - About ❌
 
 Status information:
-    - Winner (p1 won/p2 won) ❌
+    - won (p1 won/p2 won) ✔️
     - Reload ❌
     - Playing ❌
 
