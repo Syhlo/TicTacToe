@@ -184,7 +184,7 @@ def main(stdscr):
                 pass
 
             # Found winner
-            elif winner is not False:
+            elif winner is winner:
                 s.addstr(0, 27, '[  {} WINS  ]'.format(winner))
                 s.refresh()
                 gs.end_game()
