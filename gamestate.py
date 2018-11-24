@@ -1,49 +1,28 @@
 '''
 
-Name:         gamestate.py 
+Name:         gamestate.py
 
-Description:  Handles game logic, game state, and player state
+Description:  Handles the game's logic and state
 
 '''
 
 #--------------#
 #  Game State  #
 #--------------#
-
+# Handles the state of the game
 gamestate = {'board': {
-    'top':    ['1', '2', '3'],
-    'middle': ['4', '5', '6'],
-    'bottom': ['7', '8', '9']
+    'top':    [0, 0, 0],
+    'middle': [0, 0, 0],
+    'bottom': [0, 0, 0]
 },
-    'board_active': 'False'
+    # True = Game Running, False = Game Not Running
+    'board_active': True
 }
-
-#----------------#
-#  Player State  #
-#----------------#
-
-playerstate = {
-    'turn': 1,  # 1 or 2
-    'player1': 'X',
-    'player2': 'O'
-}
-
-
-# Main loop
-def tictactoe():
-    '''
-    Logic:
-        - Handle game logic in a while loop
-            - Check if winner after every placement (run win check)
-            - Place piece (X or O) depending on playerstate (check playerstate, call board placement method)
-            - Disable piece placement in occupied spaces (if index item is not 0 don't place? send improper move warning?)
-    '''
-    pass
 
 
 # Sets the piece in the game state dictionary
-def set_piece(y, x, player):
-    # Tool to find the key and index based off of coordinates
+def set_piece(y, x, piece):
+    # Tool to find the key and index in gamestate dictionary based off of coordinates
     gamestate_key = {
         '4': 'top',
         '6': 'middle',
@@ -53,23 +32,22 @@ def set_piece(y, x, player):
         '27': 2
     }
 
-    # Return key associated with y coordinate
+    # Return key (list) associated with y coordinate
     key = gamestate_key[str(y)]
-    # Return index associated with x coordinate
+
+    # Return value (index of list) associated with x coordinate
     index = gamestate_key[str(x)]
 
-    # Set the proper list[index] to the player's piece
-    gamestate['board'][key][index] = playerstate[str(player)]
-
-    # testing purposes
-    print(gamestate['board'])
-
-
-# Check if working
-set_piece(4, 27, 'player1')
+    # If the value is 0 place the piece otherwise return False (unable to place)
+    if gamestate['board'][key][index] is 0:
+        # Set the piece in gamestate's board
+        gamestate['board'][key][index] = piece
+        return True  # Success, set piece in curses' board
+    else:
+        return False  # Failure, do not set piece on either board
 
 
-# Create a list of the board state and return it
+# Create a combined list of all lists in gamestate['board'] and return it for use
 def concatenate():
     gamestate_list = []
     for value in gamestate['board'].values():
@@ -77,40 +55,66 @@ def concatenate():
     return gamestate_list
 
 
-# Check for winner
-def win_check(state):
-    iterate = concatenate()
-    # Possible win combinations (concatenated list indices)
-    # [0][1][2] [3][4][5] [6][7][8]
-    # [0][3][6] [1][4][7] [2][5][8]
-    # [0][4][8] [2][4][6]
+# Check for winning win_combo in gamestate_list
+def win_check():
+    # Create lgamestate_list
+    gl = concatenate()
 
+    # gl = [1, 1, 0, 0, 2, 1, 1, 2, 2]
+
+    # List of tuples containing possible win win_combo
+    win_combo = [(gl[0], gl[1], gl[2]),
+                 (gl[3], gl[4], gl[5]),
+                 (gl[6], gl[7], gl[8]),
+                 (gl[0], gl[3], gl[6]),
+                 (gl[1], gl[4], gl[7]),
+                 (gl[2], gl[5], gl[8]),
+                 (gl[0], gl[4], gl[8]),
+                 (gl[2], gl[4], gl[6]), ]
+
+    # incrementer
+    i = 0
+    while i <= len(win_combo)-1:
+
+        # If no winner
+        if 0 not in gl:
+            # print('No winner')
+            return None
+        # If the combination does not contain 0s
+        elif 0 not in win_combo[i]:
+
+            # If the combination is 1 = winner
+            if len(set(win_combo[i])) is 1:
+                # First item of the winning tuple (piece)
+                winner = win_combo[i][0]
+                return winner
+
+            # If the combination is more than 1 = continue
+            elif len(set(win_combo[i])) > 1:
+                i += 1
+
+        # If there is a 0 in the combination pass
+        else:
+            i += 1
+    return False
+
+# End game and offer restart
+
+
+def end_game():
     '''
-    Logic:
-        - Iterate local list cross referencing win combinations (dictionary ?)
-        - For win combinations not containing '0': len(set(<combination>))
-        - Result is equal to 1 (all 3 are the same)? Determine who won and call end_game(<winner>)
+    Logical steps:
+        - Toggle gamestate['board_active'] to 'False' (this will cancel curses active while loop)
     '''
     pass
 
 
-# End game and offer reset
-def end_game(winner):
+# Restart the game state
+def restart():
     '''
-    Logic:
-        - Toggle gamestate['active'] to 'False' (cancels tictactoe() while loop)
-        - Display message stating who won
-        - Ask if they would like to play again (Yes -> Reset, No -> Exit program)
-    '''
-    pass
+    Logical steps:
+        - Reset gameboard dictionary (reassign the original dictionary to var gameboard)
 
-
-# Reset game state, player state, and the board
-def reset():
+        - toggle gamestate[board_active] back to 'True'
     '''
-    Logic:
-        - Reset all data structures (reassign to original values)
-        - Reset board
-        - Reset while loop(run tictactoe())
-    '''
-    pass
+    return True
