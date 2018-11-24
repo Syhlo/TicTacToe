@@ -141,7 +141,10 @@ def main(stdscr):
 
             # If there's a draw
             if winner is None:
+                # Place the last piece
                 place_piece()
+                gs.win_check()
+
                 # Build window
                 nowin = cs.newwin(3, 40, 11, 8)
                 nowin.bkgd(' ', cs.color_pair(1))
@@ -156,11 +159,13 @@ def main(stdscr):
                     nowin.move(1, nx)
                     ch = nowin.getch()
 
-                    # Exit [Key: Shift + Q]
-                    if ch == ord('Q'):
-                        break
+                    # Movement [Keys: AD, HL, and Arrow Keys]
+                    if ch in (ord('a'), ord('h'), cs.KEY_LEFT) and nx > 30:
+                        nx -= 2
+                    if ch in (ord('d'), ord('l'), cs.KEY_RIGHT) and nx < 31:
+                        nx += 2
 
-                    # Place pieces [Keys: E or Spacebar]
+                    # Selection [Keys: E or Spacebar]
                     if ch in (ord('e'), ord(' ')):
                         if nx == 32:
                             pass
@@ -170,11 +175,9 @@ def main(stdscr):
                             drawboard()
                             break
 
-                    # Movement [Keys: AD, HL, and Arrow Keys]
-                    if ch in (ord('a'), ord('h'), cs.KEY_LEFT) and nx > 30:
-                        nx -= 2
-                    if ch in (ord('d'), ord('l'), cs.KEY_RIGHT) and nx < 31:
-                        nx += 2
+                    # Exit [Key: Shift + Q]
+                    if ch == ord('Q'):
+                        break
 
             # No winner
             elif winner is False:
@@ -256,13 +259,6 @@ Splash Page: ?
     - About ❌
     - Exit ❌
 
-Status information:
-    - won (p1 won/p2 won) ✔️
-    - Reload ❌
-
-Tie in game logic:
-    - set_piece() ✔️
-    - win_check ✔️ -> end_game() ✔️
-    - reset() ❌
-
+BUGS:
+Not placing last item during tie. Look at place_piece() and get_winner() to figure it out.
 '''
