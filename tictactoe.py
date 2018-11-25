@@ -162,34 +162,32 @@ def main(stdscr):
                 draw.addstr(1, 2, '* Ended in a draw. Restart? Y/N    *')
                 draw.refresh()
                 nx = 30
-                gs.end_game()
 
-                if gs.gamestate['board_active'] is False:
-                    # Start draw prompt's input loop
-                    while True:
-                        # Position mouse and catch user input
-                        draw.move(1, nx)
-                        ch = draw.getch()
+                # Start draw prompt's input loop
+                while True:
+                    # Position mouse and catch user input
+                    draw.move(1, nx)
+                    ch = draw.getch()
 
-                        # Movement [Keys: AD, HL, and Arrow Keys]
-                        if ch in (ord('a'), ord('h'), cs.KEY_LEFT) and nx > 30:
-                            nx -= 2
-                        if ch in (ord('d'), ord('l'), cs.KEY_RIGHT) and nx < 31:
-                            nx += 2
+                    # Movement [Keys: AD, HL, and Arrow Keys]
+                    if ch in (ord('a'), ord('h'), cs.KEY_LEFT) and nx > 30:
+                        nx -= 2
+                    if ch in (ord('d'), ord('l'), cs.KEY_RIGHT) and nx < 31:
+                        nx += 2
 
-                        # Selection [Keys: E or Spacebar]
-                        if ch in (ord('e'), ord(' ')):
-                            if nx == 32:  # No
-                                pass
-                            if nx == 30:  # Yes
-                                gs.restart()
-                                b.clear()
-                                drawboard()
-                                break
-
-                        # Exit [Key: Shift + Q]
-                        if ch == ord('Q'):
+                    # Selection [Keys: E or Spacebar]
+                    if ch in (ord('e'), ord(' ')):
+                        if nx == 32:  # No
+                            pass
+                        if nx == 30:  # Yes
+                            gs.restart()
+                            b.clear()
+                            drawboard()
                             break
+
+                    # Exit [Key: Shift + Q]
+                    if ch == ord('Q'):
+                        break
 
         #-------------------#
         #  Main Input Loop  #
@@ -228,7 +226,7 @@ def main(stdscr):
 
             # Place pieces [Keys: E or Spacebar]
             if c in (ord('e'), ord(' ')):
-                if gs.gamestate['board_active'] is True:
+                if gs.gamestate['active'] is True:
                     place_piece()
                     get_winner()
 
@@ -249,7 +247,7 @@ wrapper(main)
 
 # testing purposes
 print(gs.gamestate['board'])
-print(gs.gamestate['board_active'])
+print(gs.gamestate['active'])
 
 '''
 
