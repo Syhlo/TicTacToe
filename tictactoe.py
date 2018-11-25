@@ -127,6 +127,7 @@ def main(stdscr):
 
             # Attempt to place it on the gamestate board
             can_place = gs.set_piece(y, x, piece)
+            print(can_place)
 
             # If you can place it on the gamestate board render it
             if can_place:
@@ -135,7 +136,8 @@ def main(stdscr):
                 s.refresh()
 
             else:
-                # If you can't place the piece then cycle back to the piece you're trying to place
+                # If you can't place the piece then cycle back to the piece
+                # you attempted to place
                 tracker()
                 pieces()
 
@@ -175,7 +177,7 @@ def main(stdscr):
                         if nx == 30:
                             gs.restart()
                             b.clear()
-                            tieboard()
+                            drawboard()
                             break
 
                     # Exit [Key: Shift + Q]
@@ -237,7 +239,7 @@ def main(stdscr):
             if c == ord('R'):
                 gs.restart()
                 b.clear()
-                tieboard()
+                drawboard()
                 status_bar()
 
             # Exit [Key: Shift + Q]
@@ -265,5 +267,9 @@ Splash Page: ?
 
 BUGS:
 Not placing last item during tie. Look at place_piece() and get_winner() to figure it out.
+    Observations:
+    - Item does not render until tie input loop is broken.
+    - Item returns 'do not place' in set_piece()
+    - It seems to be setting the piece in gamestate['board'] despite that.
 
 '''
