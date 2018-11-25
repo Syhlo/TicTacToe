@@ -20,18 +20,20 @@ print(gs.gamestate['board'])
 
 def main(stdscr):
 
-    # Color set
+    # Color sets
     cs.init_pair(1, cs.COLOR_BLUE, cs.COLOR_BLACK)  # bg,fg
+
+    # Initial Parameters
+    cs.noecho()
+    cs.raw()
+    cs.cbreak()  # no keyboard echo
 
     #-------------------#
     #    Board Window   #
     #-------------------#
+
     b = cs.newwin(14, 46, 1, 5)
     b.keypad(True)
-
-    # Initial Parameters
-    cs.noecho()  # no keyboard echo
-    cs.cbreak()  # don't wait for newline
 
     # not in use (yet):
     # cols, rows = b.getmaxyx()
@@ -47,6 +49,7 @@ def main(stdscr):
         #-------------------#
         #  TicTacToe Board  #
         #-------------------#
+
         # Board Horizontal Lines
         b.hline(5, 18, cs.ACS_HLINE, 11)
         b.hline(7, 18, cs.ACS_HLINE, 11)
@@ -66,22 +69,21 @@ def main(stdscr):
     #-------------------#
     #   Status Window   #
     #-------------------#
+
     s = cs.newwin(1, 40, 15, 8)
     s.box()
 
     # Status Bar Contents
     def status_bar():
-        # Status Text
         s.addstr(0, 1,  '[ Turn: X  ]')
         s.addstr(0, 27, '[ HKeys: M ]')
         s.refresh()
     status_bar()
 
-    # Refresh
-
     #-------------------#
     #   Hotkey Window   #
     #-------------------#
+
     def hotkey_menu():
         hk = cs.newwin(14, 31, 1, 52)
         hk.box()
@@ -99,7 +101,8 @@ def main(stdscr):
     #-------------------#
     #   Input Control   #
     #-------------------#
-    # Set cursor
+
+    # Set cursor & y,x
     cs.curs_set(1)
 
     # Hotkey Control
@@ -116,48 +119,48 @@ def main(stdscr):
         #  Hotkey Functions  #
         #--------------------#
 
-        # Piece placing logic
+        # Handles placement of pieces
         def place_piece():
-            # Get which piece to place
+            # Get which piece to place and next piece to place
             piece = pieces()
             track = tracker()
 
-            # Run set_piece() to try to place it on the board
+            # Attempt to place it on the gamestate board
             can_place = gs.set_piece(y, x, piece)
 
-            # If place_piece is true (it can be placed
+            # If you can place it on the gamestate board render it
             if can_place:
                 s.addstr(0, 1,  '[ Turn: {}  ]'.format(track))
                 b.addch(y, x, piece)
                 s.refresh()
 
             else:
-                # Run pieces() again to prevent repeated pieces
+                # If you can't place the piece then cycle back to the piece you're trying to place
                 tracker()
                 pieces()
 
         def get_winner():
             winner = gs.win_check()
 
-            # If there's a draw
+            # If there's a tie
             if winner is None:
                 # Place the last piece and check for win
-                place_piece()  # Not Working, have to grab y,x for cursor somehow (b.maxyx() not working)
+                place_piece()
                 gs.win_check()
 
                 # Build window
-                nowin = cs.newwin(3, 40, 11, 8)
-                nowin.bkgd(' ', cs.color_pair(1))
-                nowin.box()
-                nowin.addstr(1, 2, '* Ended in a draw. Restart? Y/N    *')
-                nowin.refresh()
+                tie = cs.newwin(3, 40, 11, 8)
+                tie.bkgd(' ', cs.color_pair(1))
+                tie.box()
+                tie.addstr(1, 2, '* Ended in a tie. Restart? Y/N    *')
+                tie.refresh()
                 nx = 30
 
-                # Draw input Loop
+                # Start tie window's input loop
                 while True:
-                    # Position mouse and get user input
-                    nowin.move(1, nx)
-                    ch = nowin.getch()
+                    # Position mouse and catch user input
+                    tie.move(1, nx)
+                    ch = tie.getch()
 
                     # Movement [Keys: AD, HL, and Arrow Keys]
                     if ch in (ord('a'), ord('h'), cs.KEY_LEFT) and nx > 30:
@@ -172,14 +175,14 @@ def main(stdscr):
                         if nx == 30:
                             gs.restart()
                             b.clear()
-                            drawboard()
+                            tieboard()
                             break
 
                     # Exit [Key: Shift + Q]
                     if ch == ord('Q'):
                         break
 
-            # No winner
+            # No winner found
             elif winner is False:
                 pass
 
@@ -193,7 +196,7 @@ def main(stdscr):
         #  Main Input Loop  #
         #-------------------#
 
-        # Main input loop
+        # Start main input loop
         while True:
             # Settings
             b.move(y, x)
@@ -234,7 +237,7 @@ def main(stdscr):
             if c == ord('R'):
                 gs.restart()
                 b.clear()
-                drawboard()
+                tieboard()
                 status_bar()
 
             # Exit [Key: Shift + Q]
