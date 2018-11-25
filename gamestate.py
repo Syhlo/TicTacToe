@@ -46,10 +46,12 @@ def set_piece(y, x, piece):
     # Gives you the x coordinate responses (0,1,2 - indices)
     index = gamestate_key[str(x)]
 
-    # If the value is 0 place the piece otherwise return failure to place
+    # If the value is a placeholder then place the piece
     if gamestate['board'][key][index] is 0:
         gamestate['board'][key][index] = piece
-        return True  # Success, set piece in curses' board
+        return True  # Success, render the piece in curses
+
+    # Do not place the piece
     else:
         return False  # Failure, do not set piece on either board
 
