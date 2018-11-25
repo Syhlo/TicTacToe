@@ -10,121 +10,82 @@ Description:  Handles the game's logic and state
 #  Game State  #
 #--------------#
 
-# Handles the state of the game
-gamestate = {'board': {
-    'top':    [0, 0, 0],
-    'middle': [0, 0, 0],
-    'bottom': [0, 0, 0]
-},
-    # True = Game Running, False = Game Not Running
-    'board_active': True
+gamestate = {
+    # Board:
+    'board': [0]*9,
+    # Game running:
+    'active': True
 }
-
 
 #--------------#
 #    Pieces    #
 #--------------#
 
 # Sets the piece in the game state dictionary
+
+
 def set_piece(y, x, piece):
-    # Plug a number into this and get a response
-    gamestate_key = {
-        # Possible Y coords
-        '4': 'top',
-        '6': 'middle',
-        '8': 'bottom',
+    # potential coords
+    position = [[4, 19], [4, 23], [4, 27], [6, 19], [6, 23],
+                [6, 27], [8, 19], [8, 23], [8, 27]]
+    for index, pos in enumerate(position):
+        # Check if you can place the piece or if it's occupied
+        if [y, x] == pos and gamestate['board'][index] is 0:
+            gamestate['board'][index] = piece
+            result = True
+            break
+        else:
+            result = False
+    return result
 
-        # Possible X coords
-        '19': 0,
-        '23': 1,
-        '27': 2
-    }
 
-    # Gives you the y coordinate responses (top, middle, bottom)
-    key = gamestate_key[str(y)]
-
-    # Gives you the x coordinate responses (0,1,2 - indices)
-    index = gamestate_key[str(x)]
-
-    # If the value is a placeholder then place the piece
-    if gamestate['board'][key][index] is 0:
-        gamestate['board'][key][index] = piece
-        return True  # Success, render the piece in curses
-
-    # Do not place the piece
-    else:
-        return False  # Failure, do not set piece on either board
+#------------------#
+#    Win Combos    #
+#------------------#
+def win_combos():
+    # Win combinations
+    gs = gamestate['board']
+    won = dict(enumerate(
+        [(gs[0], gs[1], gs[2]),
+         (gs[3], gs[4], gs[5]),
+         (gs[6], gs[7], gs[8]),
+         (gs[0], gs[3], gs[6]),
+         (gs[1], gs[4], gs[7]),
+         (gs[2], gs[5], gs[8]),
+         (gs[0], gs[4], gs[8]),
+         (gs[2], gs[4], gs[6])]
+    ))
+    return won
 
 
 #------------------#
 #  Check for win   #
 #------------------#
 
-# Create an extended list from the lists in gamestate['board'] and return it for use
-def concatenate():
-    gamestate_list = []
-    for value in gamestate['board'].values():
-        gamestate_list.extend(value)
-    return gamestate_list
-
-
 # Check for winning combination in gamestate_list
 def win_check():
-    # Get returned gamestate_list
-    gl = concatenate()
-    # gl = [1, 1, 1, 1, 1, 1, 1, 1, 1]
-
-    # List of tuples containing possible combinations
-    win_combo = [(gl[0], gl[1], gl[2]),
-                 (gl[3], gl[4], gl[5]),
-                 (gl[6], gl[7], gl[8]),
-                 (gl[0], gl[3], gl[6]),
-                 (gl[1], gl[4], gl[7]),
-                 (gl[2], gl[5], gl[8]),
-                 (gl[0], gl[4], gl[8]),
-                 (gl[2], gl[4], gl[6]), ]
-
-    # Iterate for winner
-    i = 0
-    while i <= len(win_combo)-1:
-        # If the combo does not contain placeholders check for possible winner
-        if 0 not in win_combo[i]:
-            if len(set(win_combo[i])) is 1:
-                # Get the element to use as winner character
-                winner = win_combo[i][0]
-                return winner
-
-            # If the combo is not a winner then check next one
-            elif len(set(win_combo[i])) > 1:
-                i += 1
-
-        # If there is a placeholder in the combo then increment
+    won = win_combos()
+    for combo in won.values():
+        # Check for winner
+        if 0 not in combo and len(set(combo)) is 1:
+            result = combo[0]
+            break
+        # Check for tie
+        elif 0 not in gamestate['board']:
+            result = None
         else:
-            i += 1
+            result = False
+    return result
 
-    # If all pieces are placed and no winner it must be a draw
-    else:
-        if 0 not in gl:
-            return None
-
-    # No winner or draw found
-    return False
-
-# Test iteration by going through 0-8, if there's any 0s in those elements exclude them from a list.. find which character shows up the most and try to find a pair of 3 of that character matching a win combination
+# Idea: Test iteration by going through 0-8, if there's any 0s in those elements exclude them from a list.. find which character shows up the most and try to find a pair of 3 of that character matching a win combination
 
 
-# End game and offer restart
 def end_game():
-    gamestate['board_active'] = False
-    return True
+    gamestate['active'] = False
+    return None
 
 
-# Restart the game state
 def restart():
-    gamestate['board'] = {
-        'top':    [0, 0, 0],
-        'middle': [0, 0, 0],
-        'bottom': [0, 0, 0]
-    }
-    gamestate['board_active'] = True
+    gamestate['board'] = [0]*9
+    gamestate['active'] = True
     return True
