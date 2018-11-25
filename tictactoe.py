@@ -6,7 +6,7 @@ Description:   TicTacToe using Curses for input and graphics
 
 Date:          Start: Nov 21 2018
 
-Author:  Syhlo
+Author:        Syhlo
 
 '''
 import curses as cs
