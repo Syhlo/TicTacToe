@@ -13,6 +13,7 @@ import curses as cs
 import gamestate as gs
 from itertools import cycle
 from curses import wrapper
+import time
 
 # testing purposes
 print(gs.gamestate['board'])
@@ -127,72 +128,70 @@ def main(stdscr):
 
             # Attempt to place it on the gamestate board
             can_place = gs.set_piece(y, x, piece)
-            print(can_place)
 
             # If you can place it on the gamestate board render it
             if can_place:
-                s.addstr(0, 1,  '[ Turn: {}  ]'.format(track))
                 b.addch(y, x, piece)
+                s.addstr(0, 1,  '[ Turn: {}  ]'.format(track))
                 s.refresh()
 
             else:
-                # If you can't place the piece then cycle back to the piece
-                # you attempted to place
+                # Cycle back to the piece that you attempted to place
                 tracker()
                 pieces()
 
         def get_winner():
             winner = gs.win_check()
 
-            # If there's a tie
-            if winner is None:
-                # Place the last piece and check for win
-                place_piece()
-                gs.win_check()
-
-                # Build window
-                tie = cs.newwin(3, 40, 11, 8)
-                tie.bkgd(' ', cs.color_pair(1))
-                tie.box()
-                tie.addstr(1, 2, '* Ended in a tie. Restart? Y/N    *')
-                tie.refresh()
-                nx = 30
-
-                # Start tie window's input loop
-                while True:
-                    # Position mouse and catch user input
-                    tie.move(1, nx)
-                    ch = tie.getch()
-
-                    # Movement [Keys: AD, HL, and Arrow Keys]
-                    if ch in (ord('a'), ord('h'), cs.KEY_LEFT) and nx > 30:
-                        nx -= 2
-                    if ch in (ord('d'), ord('l'), cs.KEY_RIGHT) and nx < 31:
-                        nx += 2
-
-                    # Selection [Keys: E or Spacebar]
-                    if ch in (ord('e'), ord(' ')):
-                        if nx == 32:
-                            pass
-                        if nx == 30:
-                            gs.restart()
-                            b.clear()
-                            drawboard()
-                            break
-
-                    # Exit [Key: Shift + Q]
-                    if ch == ord('Q'):
-                        break
-
             # No winner found
-            elif winner is False:
+            if winner is False:
                 pass
 
             # Found winner
-            elif winner is winner:
+            elif winner is str(winner):
                 s.addstr(0, 27, '[  {} WINS  ]'.format(winner))
                 s.refresh()
                 gs.end_game()
+
+            # If there's a draw
+            elif winner is None:
+                gs.win_check()  # Verify there is no winner
+
+                # Build draw prompt
+                draw = cs.newwin(3, 40, 11, 8)
+                draw.bkgd(' ', cs.color_pair(1))
+                draw.box()
+                draw.addstr(1, 2, '* Ended in a draw. Restart? Y/N    *')
+                draw.refresh()
+                nx = 30
+                gs.end_game()
+
+                if gs.gamestate['board_active'] is False:
+                    # Start draw prompt's input loop
+                    while True:
+                        # Position mouse and catch user input
+                        draw.move(1, nx)
+                        ch = draw.getch()
+
+                        # Movement [Keys: AD, HL, and Arrow Keys]
+                        if ch in (ord('a'), ord('h'), cs.KEY_LEFT) and nx > 30:
+                            nx -= 2
+                        if ch in (ord('d'), ord('l'), cs.KEY_RIGHT) and nx < 31:
+                            nx += 2
+
+                        # Selection [Keys: E or Spacebar]
+                        if ch in (ord('e'), ord(' ')):
+                            if nx == 32:  # No
+                                pass
+                            if nx == 30:  # Yes
+                                gs.restart()
+                                b.clear()
+                                drawboard()
+                                break
+
+                        # Exit [Key: Shift + Q]
+                        if ch == ord('Q'):
+                            break
 
         #-------------------#
         #  Main Input Loop  #
@@ -266,10 +265,8 @@ Splash Page: ?
     - Exit ❌
 
 BUGS:
-Not placing last item during tie. Look at place_piece() and get_winner() to figure it out.
+Not placing last item during draw. Look at place_piece() and get_winner() to figure it out.
     Observations:
-    - Item does not render until tie input loop is broken.
-    - Item returns 'do not place' in set_piece()
-    - It seems to be setting the piece in gamestate['board'] despite that.
+    - Item does not render until draw input loop is broken.
 
 '''
