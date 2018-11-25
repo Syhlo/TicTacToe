@@ -25,9 +25,7 @@ def main(stdscr):
     cs.init_pair(1, cs.COLOR_BLUE, cs.COLOR_BLACK)  # bg,fg
 
     # Initial Parameters
-    cs.noecho()
-    cs.raw()
-    cs.cbreak()  # no keyboard echo
+    cs.noecho()  # no keyboard echo
 
     #-------------------#
     #    Board Window   #
