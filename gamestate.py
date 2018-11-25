@@ -32,7 +32,6 @@ def set_piece(y, x, piece):
 
 # Win combination check
 def win_combos():
-    # Win combinations
     gs_ = GAMESTATE['board']
     won = dict(enumerate(
         [(gs_[0], gs_[1], gs_[2]), (gs_[3], gs_[4], gs_[5]),
