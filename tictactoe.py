@@ -14,12 +14,8 @@ from curses import wrapper
 from itertools import cycle
 import gamestate as gs
 
-# testing purposes
-print(gs.GAMESTATE['board'])
-
 
 def main(stdscr):
-
     # Color sets
     curses.init_pair(1, curses.COLOR_BLUE, curses.COLOR_BLACK)  # bg,fg
 
@@ -29,87 +25,84 @@ def main(stdscr):
     #-------------------#
     #    Board Window   #
     #-------------------#
-
-    b = curses.newwin(14, 46, 1, 5)
-    b.keypad(True)
-
-    # not in use (yet):
-    # cols, rows = b.getmaxyx()
-    # 14      46
+    board = curses.newwin(14, 46, 1, 5)
 
     def drawboard():
         # Settings
-        b.box()
+        board.box()
+        board.keypad(True)
 
-        # Board Text
-        b.addstr(0, 17, '[ TicTacToe ]')
+        # Board Title
+        board.addstr(0, 17, '[ TicTacToe ]')
 
         #-------------------#
         #  TicTacToe Board  #
         #-------------------#
 
         # Board Horizontal Lines
-        b.hline(5, 18, curses.ACS_HLINE, 11)
-        b.hline(7, 18, curses.ACS_HLINE, 11)
+        board.hline(5, 18, curses.ACS_HLINE, 11)
+        board.hline(7, 18, curses.ACS_HLINE, 11)
 
         # Board Vertical Lines
-        b.vline(4, 21, curses.ACS_VLINE, 5)
-        b.vline(4, 25, curses.ACS_VLINE, 5)
+        board.vline(4, 21, curses.ACS_VLINE, 5)
+        board.vline(4, 25, curses.ACS_VLINE, 5)
 
         # Board Combining Lines
-        b.vline(5, 21, curses.ACS_SSSS, 1)
-        b.vline(5, 25, curses.ACS_SSSS, 1)
-        b.vline(7, 21, curses.ACS_SSSS, 1)
-        b.vline(7, 25, curses.ACS_SSSS, 1)
-        b.refresh()
+        board.vline(5, 21, curses.ACS_SSSS, 1)
+        board.vline(5, 25, curses.ACS_SSSS, 1)
+        board.vline(7, 21, curses.ACS_SSSS, 1)
+        board.vline(7, 25, curses.ACS_SSSS, 1)
+        board.refresh()
     drawboard()
 
     #-------------------#
     #   Status Window   #
     #-------------------#
+    status = curses.newwin(1, 40, 15, 8)
 
-    s = curses.newwin(1, 40, 15, 8)
-    s.box()
-
-    # Status Bar Contents
     def status_bar():
-        s.addstr(0, 1,  '[ Turn: X  ]')
-        s.addstr(0, 27, '[ HKeys: M ]')
-        s.refresh()
+        status.box()
+        status.addstr(0, 1,  '[ Turn: X  ]')
+        status.addstr(0, 27, '[ HKeys: M ]')
+        status.refresh()
     status_bar()
 
     #-------------------#
     #   Hotkey Window   #
     #-------------------#
+    hkm = curses.newwin(14, 31, 1, 52)
 
     def hotkey_menu():
-        hk = curses.newwin(14, 31, 1, 52)
-        hk.box()
-        hk.addstr(0, 8, '[ Hotkey Menu ]')
-        hk.addstr(1, 2, 'Movement Keys:')
-        hk.addstr(2, 3, '[WASD] [HJKL] [Arrow Keys]')
-        hk.addstr(4, 2, 'Quit:')
-        hk.addstr(5, 3, '[Shift + Q]')
-        hk.addstr(7, 2, 'Place Piece:')
-        hk.addstr(8, 3, '[Enter] [Space]')
-        hk.addstr(10, 2, 'Restart:')
-        hk.addstr(11, 3, '[Shift + R]')
-        hk.refresh()
+        hkm.box()
+        # Hotkey Menu Title
+        hkm.addstr(0, 8, '[ Hotkey Menu ]')
+        # Contents
+        hkm.addstr(1, 2, 'Movement Keys:')
+        hkm.addstr(2, 3, '[WASD] [HJKL] [Arrow Keys]')
+        hkm.addstr(4, 2, 'Quit:')
+        hkm.addstr(5, 3, '[Shift + Q]')
+        hkm.addstr(7, 2, 'Place Piece:')
+        hkm.addstr(8, 3, '[Enter] [Space]')
+        hkm.addstr(10, 2, 'Restart:')
+        hkm.addstr(11, 3, '[Shift + R]')
+        hkm.refresh()
 
     #-------------------#
     #   Input Control   #
     #-------------------#
 
-    # Set cursor & y,x
+    # Set cursor
     curses.curs_set(1)
 
     # Hotkey Control
     def hotkeys():
-        # cursor y,x coords
+        # Cursor y,x coords
         y, x = 6, 23
 
         # Whether the hotkeys menu is showing
         hk_showing = True
+
+        # Pieces & next to move tracker
         pieces = cycle('XO').__next__
         tracker = cycle('OX').__next__
 
@@ -119,19 +112,19 @@ def main(stdscr):
 
         # Handles placement of pieces
         def place_piece():
-            # Get which piece to place and next piece to place
+            # Get which piece to place and next move tracker
             piece = pieces()
             track = tracker()
 
-            # Attempt to place it on the GAMESTATE board
+            # Attempt to place it on the board
             can_place = gs.set_piece(y, x, piece)
 
-            # If you can place it in the GAMESTATE render it
+            # If you can place it then render it
             if can_place:
-                b.addch(y, x, piece)
-                s.addstr(0, 1, '[ Turn: {}  ]'.format(track))
-                s.refresh()
-
+                board.addch(y, x, piece)
+                status.addstr(0, 1, '[ Turn: {}  ]'.format(track))
+                status.refresh()
+                get_winner()
             else:
                 # Cycle back to the piece that you attempted to place
                 tracker()
@@ -142,11 +135,11 @@ def main(stdscr):
 
             # Found winner
             if winner is str(winner):
-                s.addstr(0, 27, '[  {} WINS  ]'.format(winner))
-                s.refresh()
+                status.addstr(0, 27, '[  {} WINS  ]'.format(winner))
+                status.refresh()
                 gs.end_game()
 
-            # If there's a draw
+            # Found a draw
             elif winner is None:
                 gs.win_check()  # Verify there is no winner
 
@@ -157,9 +150,13 @@ def main(stdscr):
                 draw.addstr(1, 2, '* Ended in a draw. Restart? Y/N    *')
                 draw.refresh()
                 nx = 30
+                gs.end_game()
 
-                # Start draw prompt's input loop
-                while True:
+                #-------------------#
+                #  Draw Input Loop  #
+                #-------------------#
+
+                while not gs.GAMESTATE['active']:
                     # Position mouse and catch user input
                     draw.move(1, nx)
                     ch = draw.getch()
@@ -176,7 +173,7 @@ def main(stdscr):
                             pass
                         if nx == 30:  # Yes
                             gs.restart()
-                            b.clear()
+                            board.clear()
                             drawboard()
                             break
 
@@ -188,11 +185,10 @@ def main(stdscr):
         #  Main Input Loop  #
         #-------------------#
 
-        # Start main input loop
-        while True:
+        while gs.GAMESTATE['active']:
             # Settings
-            b.move(y, x)
-            c = b.getch()
+            board.move(y, x)
+            c = board.getch()
 
             #-------------------#
             #      Hotkeys      #
@@ -210,25 +206,24 @@ def main(stdscr):
 
             # Hotkey Menu [Key: M]
             if c == ord('m'):
-                hk = curses.newwin(14, 31, 1, 52)
+                hkm = curses.newwin(14, 31, 1, 52)
                 if hk_showing:
                     hotkey_menu()
                     hk_showing = False
                 else:
-                    hk.clear()
-                    hk.refresh()
+                    hkm.clear()
+                    hkm.refresh()
                     hk_showing = True
 
             # Place pieces [Keys: E or Spacebar]
             if c in (ord('e'), ord(' ')):
                 if gs.GAMESTATE['active'] is True:
                     place_piece()
-                    get_winner()
 
             # Restart Game [Key: Shift + R]
             if c == ord('R'):
                 gs.restart()
-                b.clear()
+                board.clear()
                 drawboard()
                 status_bar()
 
@@ -239,7 +234,3 @@ def main(stdscr):
 
 
 wrapper(main)
-
-# testing purposes
-print(gs.GAMESTATE['board'])
-print(gs.GAMESTATE['active'])
