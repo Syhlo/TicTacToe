@@ -156,7 +156,7 @@ def main(stdscr):
                 #  Draw Input Loop  #
                 #-------------------#
 
-                while not gs.GAMESTATE['active']:
+                while gs.GAMESTATE['active'] is False:
                     # Position mouse and catch user input
                     draw.move(1, nx)
                     ch = draw.getch()
