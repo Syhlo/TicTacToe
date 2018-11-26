@@ -44,8 +44,7 @@ def win_combos():
 
 # Check for win or draw
 def win_check():
-    won = win_combos()
-    for combo in won.values():
+    for combo in win_combos().values():
         # Check for winner
         if 0 not in combo and len(set(combo)) is 1:
             result = combo[0]
