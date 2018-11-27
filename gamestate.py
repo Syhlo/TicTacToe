@@ -10,7 +10,9 @@ GAMESTATE = {
     # Board:
     'board': [0]*9,
     # Game running:
-    'active': True
+    'active': True,
+    # Close the game
+    'close': False
 }
 
 

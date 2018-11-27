@@ -175,7 +175,8 @@ def main(stdscr):
                 # Selection [Keys: E or Spacebar]
                 if ch in (ord('e'), ord(' ')):
                     if nx == 32:  # No
-                        pass
+                        gs.GAMESTATE['close'] = True
+                        break
                     if nx == 30:  # Yes
                         gs.restart()
                         board.clear()
@@ -190,7 +191,7 @@ def main(stdscr):
         #      Hotkeys      #
         #-------------------#
 
-        while True:
+        while gs.GAMESTATE['close'] is not True:
             # Settings
             board.move(y, x)
             c = board.getch()
