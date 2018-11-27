@@ -16,6 +16,7 @@ import gamestate as gs
 def main(stdscr):
     # Color sets
     curses.init_pair(1, curses.COLOR_BLUE, curses.COLOR_BLACK)  # bg,fg
+    curses.init_pair(2, curses.COLOR_GREEN, curses.COLOR_BLACK)  # bg,fg
 
     # Initial Parameters
     curses.noecho()  # no keyboard echo
@@ -134,9 +135,15 @@ def main(stdscr):
 
             # Found winner
             if winner is str(winner):
-                status.addstr(0, 27, '[  {} WINS  ]'.format(winner))
-                status.refresh()
+                win = curses.newwin(3, 40, 11, 8)
+                win.bkgd(' ', curses.color_pair(2))
+                win.box()
+                win.addstr(
+                    1, 2, '* Piece {} has won. Restart? Y/N    *'.format(winner))
                 gs.end_game()
+
+                # Call input controller
+                prompt_input(win, 30)
 
             # Found a draw
             elif winner is None:
@@ -148,50 +155,45 @@ def main(stdscr):
                 draw.box()
                 draw.addstr(1, 2, '* Ended in a draw. Restart? Y/N    *')
                 draw.refresh()
-                nx = 30
                 gs.end_game()
 
-                #-------------------#
-                #  Draw Input Loop  #
-                #-------------------#
+                # Call input controller
+                prompt_input(draw, 30)
 
-                while gs.GAMESTATE['active'] is False:
+        def prompt_input(win_name, nx):
+            while gs.GAMESTATE['active'] is False:
                     # Position mouse and catch user input
-                    draw.move(1, nx)
-                    ch = draw.getch()
+                win_name.move(1, nx)
+                ch = win_name.getch()
 
-                    # Movement [Keys: AD, HL, and Arrow Keys]
-                    if ch in (ord('a'), ord('h'), curses.KEY_LEFT) and nx > 30:
-                        nx -= 2
-                    if ch in (ord('d'), ord('l'), curses.KEY_RIGHT) and nx < 31:
-                        nx += 2
+                # Movement [Keys: AD, HL, and Arrow Keys]
+                if ch in (ord('a'), ord('h'), curses.KEY_LEFT) and nx > 30:
+                    nx -= 2
+                if ch in (ord('d'), ord('l'), curses.KEY_RIGHT) and nx < 31:
+                    nx += 2
 
-                    # Selection [Keys: E or Spacebar]
-                    if ch in (ord('e'), ord(' ')):
-                        if nx == 32:  # No
-                            pass
-                        if nx == 30:  # Yes
-                            gs.restart()
-                            board.clear()
-                            drawboard()
-                            break
-
-                    # Exit [Key: Shift + Q]
-                    if ch == ord('Q'):
+                # Selection [Keys: E or Spacebar]
+                if ch in (ord('e'), ord(' ')):
+                    if nx == 32:  # No
+                        pass
+                    if nx == 30:  # Yes
+                        gs.restart()
+                        board.clear()
+                        drawboard()
                         break
 
+                # Exit [Key: Shift + Q]
+                if ch == ord('Q'):
+                    break
+
         #-------------------#
-        #  Main Input Loop  #
+        #      Hotkeys      #
         #-------------------#
 
         while True:
             # Settings
             board.move(y, x)
             c = board.getch()
-
-            #-------------------#
-            #      Hotkeys      #
-            #-------------------#
 
             # Movement [Keys: WASD, HJKL, and Arrow Keys]
             if c in (ord('w'), ord('k'), curses.KEY_UP) and y > 4:
@@ -229,6 +231,7 @@ def main(stdscr):
             # Exit [Key: Shift + Q]
             if c == ord('Q'):
                 break
+
     hotkeys()
 
 
