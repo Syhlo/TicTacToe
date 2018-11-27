@@ -120,6 +120,7 @@ def main(stdscr):
             # If you can place it then render it
             if can_place:
                 board.addch(y, x, piece)
+                board.refresh()
                 status.addstr(0, 1, '[ Turn: {}  ]'.format(track))
                 status.refresh()
                 get_winner()
@@ -183,7 +184,7 @@ def main(stdscr):
         #  Main Input Loop  #
         #-------------------#
 
-        while gs.GAMESTATE['active']:
+        while True:
             # Settings
             board.move(y, x)
             c = board.getch()
