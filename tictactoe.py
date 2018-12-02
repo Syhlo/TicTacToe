@@ -15,19 +15,19 @@ import gamestate as gs
 
 def main(stdscr):
     # Color sets
-    curses.init_pair(1, curses.COLOR_BLUE, curses.COLOR_BLACK)  # bg,fg
-    curses.init_pair(2, curses.COLOR_GREEN, curses.COLOR_BLACK)  # bg,fg
+    curses.init_pair(1, curses.COLOR_BLUE, curses.COLOR_BLACK)
+    curses.init_pair(2, curses.COLOR_GREEN, curses.COLOR_BLACK)
 
     # Initial Parameters
-    curses.noecho()  # no keyboard echo
+    curses.noecho()
 
     #-------------------#
     #    Board Window   #
     #-------------------#
+
     board = curses.newwin(14, 46, 1, 5)
 
     def drawboard():
-        # Settings
         board.box()
         board.keypad(True)
 
@@ -57,10 +57,13 @@ def main(stdscr):
     #-------------------#
     #   Status Window   #
     #-------------------#
+
     status = curses.newwin(1, 40, 15, 8)
 
     def status_bar():
         status.box()
+
+        # Content
         status.addstr(0, 1,  '[ Turn: X  ]')
         status.addstr(0, 27, '[ HKeys: M ]')
         status.refresh()
@@ -69,13 +72,16 @@ def main(stdscr):
     #-------------------#
     #   Hotkey Window   #
     #-------------------#
+
     hkm = curses.newwin(14, 31, 1, 52)
 
     def hotkey_menu():
         hkm.box()
+
         # Hotkey Menu Title
         hkm.addstr(0, 8, '[ Hotkey Menu ]')
-        # Contents
+
+        # Content
         hkm.addstr(1, 2, 'Movement Keys:')
         hkm.addstr(2, 3, '[WASD] [HJKL] [Arrow Keys]')
         hkm.addstr(4, 2, 'Quit:')
@@ -86,15 +92,14 @@ def main(stdscr):
         hkm.addstr(11, 3, '[Shift + R]')
         hkm.refresh()
 
-    #-------------------#
-    #   Input Control   #
-    #-------------------#
+    #--------------------#
+    #   Hotkey Control   #
+    #--------------------#
 
-    # Set cursor
-    curses.curs_set(1)
-
-    # Hotkey Control
     def hotkeys():
+        # Set cursor
+        curses.curs_set(1)
+
         # Cursor y,x coords
         y, x = 6, 23
 
@@ -130,14 +135,19 @@ def main(stdscr):
                 tracker()
                 pieces()
 
+        # Check for winner
         def get_winner():
             winner = gs.win_check()
 
-            # Found winner
+            # Found a winner
             if winner is str(winner):
+
+                # Build winner prompt
                 win = curses.newwin(3, 40, 11, 8)
                 win.bkgd(' ', curses.color_pair(2))
                 win.box()
+
+                # Content
                 win.addstr(
                     1, 2, '* Piece {} has won. Restart? Y/N    *'.format(winner))
                 gs.end_game()
@@ -151,8 +161,12 @@ def main(stdscr):
 
                 # Build draw prompt
                 draw = curses.newwin(3, 40, 11, 8)
+
+                # Settings
                 draw.bkgd(' ', curses.color_pair(1))
                 draw.box()
+
+                # Content
                 draw.addstr(1, 2, '* Ended in a draw. Restart? Y/N    *')
                 draw.refresh()
                 gs.end_game()
@@ -160,9 +174,13 @@ def main(stdscr):
                 # Call input controller
                 prompt_input(draw, 30)
 
+        #------------------#
+        #  Prompt Hotkeys  #
+        #------------------#
+
         def prompt_input(win_name, nx):
             while gs.GAMESTATE['active'] is False:
-                    # Position mouse and catch user input
+                # Position mouse and catch user input
                 win_name.move(1, nx)
                 ch = win_name.getch()
 
